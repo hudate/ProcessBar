@@ -7,7 +7,7 @@ import time
 
 class Bar(object):
 
-    def __init__(self, running_char='#', mask_char='#'):
+    def __init__(self, running_char='*', mask_char='#'):
         self.func_name_list = []
         self.func_time_list = []
         self.running_char = running_char
@@ -50,9 +50,7 @@ class Bar(object):
         if func_name is not None:
             name_list.append('func_name: %s' % func_name)
 
-
         _percent = now_value / max_value
-
 
         if _percent == 0.0:
             _ran_time = '%.2f' % ran_time
@@ -62,10 +60,8 @@ class Bar(object):
                 _running_chars_count * self.running_char, _percent)
         else:
             if _percent != 1.0:
-                time.sleep(0.1)
-                # subprocess.Popen(['clear'])
+                '''clear some lines content, and reprint string'''
                 pass
-
             _total_time = ran_time / _percent
             _ran_time = '%.2f' % ran_time
             _remaining_time = '%.2f' % (_total_time - ran_time)
@@ -87,32 +83,4 @@ class Bar(object):
         self.show_bar(app_name, model_name, func_name, ran_time, max_value, now_value, msg)
 
 
-class Test(threading.Thread):
-
-    def __init__(self, app_name, func_name):
-        super(Test, self).__init__()
-        self.app_name = app_name
-        self.func_name = func_name
-
-    def run(self):
-        a = Bar()
-        i = 0
-        max_value = 100
-        while i < max_value:
-            a.process(app_name=self.app_name, func_name=self.func_name, max_value=max_value, now_value=i)
-            i += 1
-            time.sleep(0.06)
-        else:
-            a.process(app_name=self.app_name, func_name=self.func_name, max_value=max_value, now_value=i, msg='已完成！')
-
-
-
-if __name__ == '__main__':
-    pool = []
-    for a in range(5):
-        t = Test('test', 'test %s' % a)
-        t.setDaemon(True)
-        t.start()
-        pool.append(t)
-    [t.join() for t in pool]
 
